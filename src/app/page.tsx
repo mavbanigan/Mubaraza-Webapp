@@ -1,63 +1,384 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import "./globals.css";
+import Link from "next/link";
+
+/* ─── SVG Icons ─────────────────────────────────────────────────────────── */
+
+function ChevronDown() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+      <path d="M3 5l4 4 4-4" stroke="currentColor" strokeWidth="1.8"
+        strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function DownloadIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+      <path d="M7.5 1.5v8M4.5 7l3 3 3-3" stroke="currentColor" strokeWidth="1.7"
+        strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M2 12h11" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function SignInArrow() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M6 3H3a1 1 0 00-1 1v8a1 1 0 001 1h3" stroke="currentColor"
+        strokeWidth="1.6" strokeLinecap="round" />
+      <path d="M10 5l4 3-4 3M14 8H6" stroke="currentColor" strokeWidth="1.6"
+        strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+/* Safari compass icon */
+function SafariIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.4" />
+      <circle cx="8" cy="8" r="0.9" fill="currentColor" />
+      {/* Compass needle — NE red, SW blue-ish (simplified as two triangles) */}
+      <path d="M8 8 L10.5 3.5 L8 6.2 Z" fill="currentColor" opacity="0.9" />
+      <path d="M8 8 L5.5 12.5 L8 9.8 Z" fill="currentColor" opacity="0.4" />
+      {/* Tick marks */}
+      <line x1="8" y1="1.4" x2="8" y2="2.6" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+      <line x1="8" y1="13.4" x2="8" y2="14.6" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+      <line x1="1.4" y1="8" x2="2.6" y2="8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+      <line x1="13.4" y1="8" x2="14.6" y2="8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function LeaderboardIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+      <rect x="1" y="9" width="3" height="5" rx="0.5" stroke="currentColor" strokeWidth="1.4" />
+      <rect x="6" y="5" width="3" height="9" rx="0.5" stroke="currentColor" strokeWidth="1.4" />
+      <rect x="11" y="1" width="3" height="13" rx="0.5" stroke="currentColor" strokeWidth="1.4" />
+    </svg>
+  );
+}
+
+function BugIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+      <ellipse cx="7.5" cy="9.5" rx="3.5" ry="4" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M7.5 5.5V3.5M5 6.5L3 5M10 6.5l2-1.5" stroke="currentColor"
+        strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M4 9.5H2M13 9.5h-2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function SignUpArrow() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+      <path d="M9 7.5H2M6 5l3.5 2.5L6 10" stroke="currentColor" strokeWidth="1.6"
+        strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M4 2.5H13a.5.5 0 01.5.5v10a.5.5 0 01-.5.5H4" stroke="currentColor"
+        strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+/* ─── Circular MB Logo (navbar) ─────────────────────────────────────────── */
+
+function MBLogoSmall({ size = 34 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 34 34" fill="none" aria-label="Mubaraza logo">
+      <circle cx="17" cy="17" r="15.5" stroke="#1d8fe8" strokeWidth="2.5" fill="#1e2130" />
+      <circle cx="17" cy="17" r="10" stroke="#1d8fe8" strokeWidth="2"
+        fill="none" strokeDasharray="12 6" strokeDashoffset="3" />
+      <circle cx="17" cy="17" r="5" fill="#1d8fe8" />
+      <text x="17" y="20.5" textAnchor="middle" dominantBaseline="middle"
+        fill="#0f1117" fontSize="7" fontWeight="900" fontFamily="'Inter', sans-serif"
+        letterSpacing="0.5">
+        MB
+      </text>
+    </svg>
+  );
+}
+
+/* ─── Hero Logo (large circular) ────────────────────────────────────────── */
+
+function HeroLogo() {
+  return (
+    <div className="hero-logo-wrap" aria-hidden="true">
+      <svg className="hero-logo-svg" viewBox="0 0 240 240"
+        fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="heroGlow" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="12" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+          <filter id="innerGlow" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="5" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+        <circle cx="120" cy="120" r="115" stroke="#1d8fe8" strokeWidth="1.5"
+          fill="none" opacity="0.25" />
+        <circle cx="120" cy="120" r="108" stroke="#1d8fe8" strokeWidth="6"
+          fill="rgba(29,143,232,0.07)" filter="url(#heroGlow)"
+          strokeDasharray="160 80" strokeDashoffset="0" />
+        <circle cx="120" cy="120" r="108" stroke="#1d8fe8" strokeWidth="6"
+          fill="none" strokeDasharray="80 160" strokeDashoffset="80" opacity="0.5" />
+        <circle cx="120" cy="120" r="80" stroke="#1d8fe8" strokeWidth="3.5"
+          fill="none" strokeDasharray="50 30" strokeDashoffset="10"
+          filter="url(#innerGlow)" />
+        <circle cx="120" cy="120" r="80" stroke="#1d8fe8" strokeWidth="3.5"
+          fill="none" strokeDasharray="30 50" strokeDashoffset="85" opacity="0.4" />
+        <circle cx="120" cy="120" r="52" fill="#1d8fe8" filter="url(#innerGlow)" />
+        <circle cx="120" cy="120" r="44" fill="#1e2130" />
+        <text x="120" y="126" textAnchor="middle" dominantBaseline="middle"
+          fill="#1d8fe8" fontSize="36" fontWeight="900"
+          fontFamily="'Inter', 'Helvetica Neue', sans-serif" letterSpacing="4"
+          filter="url(#innerGlow)">
+          MB
+        </text>
+      </svg>
+    </div>
+  );
+}
+
+/* ─── 3D Isometric Maze Background ─────────────────────────────────────── */
+
+function MazeBackground() {
+  const CELL = 80;       // cell footprint in isometric pixels
+  const WALL_H = 30;     // wall height (3D extrusion depth)
+  const COLS = 44;
+  const ROWS = 28;
+
+  // Iso projection helpers
+  // (col, row) grid → screen (sx, sy) for top-left corner of cell
+  const isoX = (c: number, r: number) => (c - r) * (CELL / 2);
+  const isoY = (c: number, r: number) => (c + r) * (CELL / 4);
+
+  // Deterministic wall presence
+  const hasRight  = (r: number, c: number) => ((r * 37 + c * 17) % 7) !== 0 && ((r * 37 + c * 17) % 7) !== 3;
+  const hasBottom = (r: number, c: number) => ((r * 37 + c * 17) % 7) !== 1 && ((r * 37 + c * 17) % 7) !== 4;
+
+  // SVG viewBox: center the iso grid
+  const vw = COLS * CELL * 0.2;
+  const vh = ROWS * CELL * 0.32;
+  const ox = vw / 2;   // origin x offset so grid is centered
+  const oy = 20;        // origin y offset
+
+  const wallTop    = "rgba(180,180,190,0.13)";
+  const wallLeft   = "rgba(100,100,110,0.08)";
+  const wallRight  = "rgba(140,140,155,0.11)";
+  const wallStroke = "rgba(160,160,175,0.18)";
+
+  const wallPaths: JSX.Element[] = [];
+
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      // Right wall (runs along bottom-right edge of cell)
+      if (hasRight(r, c) && c < COLS - 1) {
+        // Top-right edge of this cell → top-left edge of (c+1, r)
+        const ax = ox + isoX(c + 1, r);
+        const ay = oy + isoY(c + 1, r);
+        const bx = ox + isoX(c + 1, r + 1);
+        const by = oy + isoY(c + 1, r + 1);
+
+        // Top face top-right → bottom-right → bottom-right-lowered → top-right-lowered
+        wallPaths.push(
+          <g key={`rv-${r}-${c}`}>
+            {/* Right face */}
+            <polygon
+              points={`${ax},${ay} ${bx},${by} ${bx},${by + WALL_H} ${ax},${ay + WALL_H}`}
+              fill={wallRight} stroke={wallStroke} strokeWidth="0.6" />
+            {/* Left face (slightly lighter, faces camera more) */}
+            <polygon
+              points={`${ax},${ay} ${ax},${ay + WALL_H} ${ax - 1},${ay + WALL_H} ${ax - 1},${ay}`}
+              fill={wallLeft} stroke="none" />
+            {/* Top cap */}
+            <line x1={ax} y1={ay} x2={bx} y2={by} stroke={wallStroke} strokeWidth="0.8" />
+          </g>
+        );
+      }
+
+      // Bottom wall (runs along bottom-left edge of cell)
+      if (hasBottom(r, c) && r < ROWS - 1) {
+        const ax = ox + isoX(c, r + 1);
+        const ay = oy + isoY(c, r + 1);
+        const bx = ox + isoX(c + 1, r + 1);
+        const by = oy + isoY(c + 1, r + 1);
+
+        wallPaths.push(
+          <g key={`bv-${r}-${c}`}>
+            {/* Left face */}
+            <polygon
+              points={`${ax},${ay} ${bx},${by} ${bx},${by + WALL_H} ${ax},${ay + WALL_H}`}
+              fill={wallLeft} stroke={wallStroke} strokeWidth="0.6" />
+            {/* Top cap */}
+            <line x1={ax} y1={ay} x2={bx} y2={by} stroke={wallStroke} strokeWidth="0.8" />
+          </g>
+        );
+      }
+    }
+  }
+
+  // Draw floor grid (faint iso diamonds)
+  const floorLines: JSX.Element[] = [];
+  for (let r = 0; r <= ROWS; r++) {
+    const ax = ox + isoX(0, r);
+    const ay = oy + isoY(0, r);
+    const bx = ox + isoX(COLS, r);
+    const by = oy + isoY(COLS, r);
+    floorLines.push(
+      <line key={`fh${r}`} x1={ax} y1={ay} x2={bx} y2={by}
+        stroke="rgba(160,160,170,0.07)" strokeWidth="0.6" />
+    );
+  }
+  for (let c = 0; c <= COLS; c++) {
+    const ax = ox + isoX(c, 0);
+    const ay = oy + isoY(c, 0);
+    const bx = ox + isoX(c, ROWS);
+    const by = oy + isoY(c, ROWS);
+    floorLines.push(
+      <line key={`fv${c}`} x1={ax} y1={ay} x2={bx} y2={by}
+        stroke="rgba(160,160,170,0.07)" strokeWidth="0.6" />
+    );
+  }
+
+  return (
+    <svg
+      className="maze-bg"
+      viewBox={`0 0 ${vw} ${vh}`}
+      preserveAspectRatio="xMidYMid slice"
+      aria-hidden="true"
+    >
+      {floorLines}
+      {wallPaths}
+    </svg>
+  );
+}
+
+/* ─── Dropdown ──────────────────────────────────────────────────────────── */
+
+interface DropdownItem { label: string; href?: string }
+
+function NavDropdown({ label, items, icon }: {
+  label: string;
+  items: DropdownItem[];
+  icon?: React.ReactNode;
+}) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div
+      className="nav-dropdown"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
+      <button className="nav-link" aria-expanded={open} aria-haspopup="true">
+        {icon && <span className="nav-link-icon">{icon}</span>}
+        {label}
+        <span className="nav-chevron"><ChevronDown /></span>
+      </button>
+      {open && (
+        <div className="dropdown-menu" role="menu">
+          {items.map((item) => (
+            <Link
+              key={item.label}
+              href={item.href ?? "#"}
+              className="dropdown-item"
+              role="menuitem"
+            >
+              {item.label}
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ─── Page ──────────────────────────────────────────────────────────────── */
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+    <div className="app">
+
+      {/* ── Navbar ── */}
+      <nav className="navbar">
+        <div className="navbar-inner">
+
+          <Link href="/" className="brand">
+            <MBLogoSmall size={34} />
+            <span className="brand-name">mubaraza</span>
+          </Link>
+
+          <div className="nav-links">
+            <NavDropdown
+              label="Discover content"
+              icon={<SafariIcon />}
+              items={[
+                { label: "Weapon Packs" },
+                { label: "Armor Sets" },
+              ]}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <NavDropdown
+              label="Leaderboard"
+              icon={<LeaderboardIcon />}
+              items={[
+                { label: "Global Rankings" },
+              ]}
+            />
+            <Link href="/download" className="nav-link">
+              <span className="nav-link-icon"><DownloadIcon /></span>
+              Download Client
+            </Link>
+          </div>
+
+          <div className="nav-actions">
+            <Link href="/signin" className="signin-btn">
+              <SignInArrow />
+              Sign in
+            </Link>
+          </div>
+        </div>
+      </nav>
+
+      {/* ── Hero ── */}
+      <main className="hero">
+        <MazeBackground />
+        <div className="hero-vignette" aria-hidden="true" />
+
+        <div className="hero-content">
+          <HeroLogo />
+
+          <h1 className="hero-headline">
+            The place where minecraft meets
+            <br />
+            <span className="hero-accent">Chivalry&nbsp;2.</span>
+          </h1>
+
+          <p className="hero-description">
+            Idk what this mod does but description here.
+          </p>
+
+          <div className="cta-row">
+            <Link href="/bugtracker" className="cta-btn cta-btn--secondary">
+              <BugIcon />
+              Bug Tracker
+            </Link>
+            <Link href="/signup" className="cta-btn cta-btn--primary">
+              <SignUpArrow />
+              Sign Up
+            </Link>
+          </div>
         </div>
       </main>
     </div>
