@@ -1,0 +1,312 @@
+/* --- Navbar --- */
+.navbar {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 200;
+  height: var(--nav-h);
+  background: var(--bg-nav);
+  backdrop-filter: blur(18px) saturate(1.4);
+  border-bottom: 1px solid var(--border);
+}
+
+.navbarInner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 28px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/* Brand */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  margin-right: 32px;
+}
+
+.brandName {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: var(--text);
+}
+
+/* Nav links */
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: 1;
+}
+
+.navLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-nav);
+  border-radius: var(--radius);
+  transition: color 0.15s, background 0.15s;
+  white-space: nowrap;
+}
+
+.navLink:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.navLinkIcon {
+  display: flex;
+  align-items: center;
+  opacity: 0.75;
+}
+
+.navChevron {
+  display: flex;
+  align-items: center;
+  opacity: 0.55;
+  transition: opacity 0.15s;
+  margin-left: 2px;
+}
+
+.navLink:hover .navChevron {
+  opacity: 0.9;
+}
+
+/* Dropdown */
+.navDropdown {
+  position: relative;
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 200px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.25),
+    0 24px 56px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.04);
+  animation: dropIn 0.14s ease;
+}
+
+.dropdownItem {
+  display: block;
+  padding: 10px 16px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-nav);
+  transition: color 0.12s, background 0.12s;
+  border-bottom: 1px solid var(--border);
+}
+.dropdownItem:last-child {
+  border-bottom: none;
+}
+.dropdownItem:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+/* Right actions */
+.navActions {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* Sign in pill */
+.signinBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 22px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--blue);
+  border-radius: 9999px;
+  transition: background 0.15s, box-shadow 0.15s, transform 0.12s;
+  white-space: nowrap;
+  letter-spacing: -0.1px;
+}
+
+.signinBtn:hover {
+  background: var(--blue-bright);
+  box-shadow: 0 0 0 4px var(--blue-glow);
+  transform: translateY(-1px);
+}
+
+/* --- Hero --- */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.mazeBg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.heroVignette {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 55% 60% at 50% 50%,
+      transparent 0%,
+      rgba(30, 33, 48, 0.45) 55%,
+      rgba(30, 33, 48, 0.88) 100%),
+    linear-gradient(to bottom,
+      rgba(30, 33, 48, 0.95) 0%,
+      transparent 15%,
+      transparent 82%,
+      rgba(30, 33, 48, 0.95) 100%),
+    linear-gradient(to right,
+      rgba(30, 33, 48, 0.85) 0%,
+      transparent 12%,
+      transparent 88%,
+      rgba(30, 33, 48, 0.85) 100%);
+  pointer-events: none;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: calc(var(--nav-h) + 40px) 24px 80px;
+  max-width: 900px;
+  width: 100%;
+}
+
+.heroLogoWrap {
+  margin-bottom: 36px;
+  animation: logoIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.heroLogoSvg {
+  width: min(220px, 52vw);
+  height: auto;
+  filter: drop-shadow(0 0 52px rgba(29, 143, 232, 0.4));
+}
+
+.heroHeadline {
+  font-size: clamp(34px, 7vw, 78px);
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: -2.5px;
+  color: var(--text);
+  margin-bottom: 22px;
+  animation: fadeUp 0.7s 0.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.heroAccent {
+  color: var(--blue);
+  display: block;
+  text-shadow:
+    0 0 80px rgba(29, 143, 232, 0.65),
+    0 0 140px rgba(29, 143, 232, 0.3);
+}
+
+.heroDescription {
+  font-size: clamp(15px, 2vw, 18px);
+  line-height: 1.7;
+  color: var(--text-muted);
+  max-width: 520px;
+  margin-bottom: 44px;
+  font-weight: 400;
+  animation: fadeUp 0.7s 0.34s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* CTA row */
+.ctaRow {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+  animation: fadeUp 0.7s 0.46s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.ctaBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 28px;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: var(--radius);
+  transition: transform 0.14s, box-shadow 0.18s, background 0.15s, border-color 0.15s;
+  letter-spacing: -0.1px;
+}
+
+.ctaBtn:hover {
+  transform: translateY(-2px);
+}
+
+.ctaBtnSecondary {
+  background: var(--surface);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-nav);
+}
+.ctaBtnSecondary:hover {
+  background: var(--surface-2);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--text);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4);
+}
+
+.ctaBtnPrimary {
+  background: var(--blue);
+  border: 1px solid transparent;
+  color: #fff;
+}
+.ctaBtnPrimary:hover {
+  background: var(--blue-bright);
+  box-shadow: 0 0 0 5px var(--blue-glow), 0 8px 28px rgba(29, 143, 232, 0.35);
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .navLinks {
+    display: none;
+  }
+  .heroHeadline {
+    letter-spacing: -1.2px;
+  }
+  .ctaRow {
+    flex-direction: column;
+    align-items: center;
+  }
+  .ctaBtn {
+    width: 240px;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heroLogoWrap,
+  .heroHeadline,
+  .heroDescription,
+  .ctaRow {
+    animation: none;
+  }
+}
