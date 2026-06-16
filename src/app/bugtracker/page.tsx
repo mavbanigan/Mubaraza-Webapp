@@ -6,9 +6,9 @@ import Link from "next/link";
 
 /* --- Types --- */
 
-type Status   = "Open" | "In Progress" | "Resolved" | "Closed" | "Won't Fix";
+type Status   = "Open" | "In Progress" | "Resolved" | "Closed";
 type Severity = "Critical" | "High" | "Medium" | "Low";
-type Category = "Client" | "Server" | "Combat" | "UI" | "World Gen" | "Audio" | "Network";
+type Category = "Client" | "Server" | "Combat" | "UI" | "Audio" | "Network";
 
 interface Bug {
   id:        string;
@@ -29,17 +29,17 @@ const bugs: Bug[] = [
   { id: "MUB-103", title: "Leaderboard score not updating after match",   status: "Open",        severity: "High",     category: "Server",    reporter: "Herobrine",     createdAt: "2026-06-14", comments: 2  },
   { id: "MUB-104", title: "Shield block animation plays twice on cancel", status: "Open",        severity: "Medium",   category: "Combat",    reporter: "Notch",         createdAt: "2026-06-13", comments: 1  },
   { id: "MUB-105", title: "HUD health bar flickers when below 3 hearts",  status: "Resolved",    severity: "Medium",   category: "UI",        reporter: "Dinnerbone",    createdAt: "2026-06-12", comments: 5  },
-  { id: "MUB-106", title: "Spawn chunks not loading on arena join",       status: "Open",        severity: "High",     category: "World Gen", reporter: "jeb_",          createdAt: "2026-06-11", comments: 3  },
+  { id: "MUB-106", title: "Spawn chunks not loading on arena join",       status: "Open",        severity: "High",     category: "Server", reporter: "jeb_",          createdAt: "2026-06-11", comments: 3  },
   { id: "MUB-107", title: "Crossbow reload sound plays out of sync",      status: "Resolved",    severity: "Low",      category: "Audio",     reporter: "Grumm",         createdAt: "2026-06-10", comments: 0  },
-  { id: "MUB-108", title: "Players can clip through castle gate geometry",status: "In Progress", severity: "Critical", category: "World Gen", reporter: "Marc_IRL",      createdAt: "2026-06-09", comments: 9  },
+  { id: "MUB-108", title: "Players can clip through castle gate geometry",status: "In Progress", severity: "Critical", category: "Server", reporter: "Marc_IRL",      createdAt: "2026-06-09", comments: 9  },
   { id: "MUB-109", title: "Death screen respawn button unresponsive",     status: "Open",        severity: "High",     category: "UI",        reporter: "Steve",         createdAt: "2026-06-08", comments: 6  },
-  { id: "MUB-110", title: "Network timeout not handled gracefully",       status: "Won't Fix",   severity: "Low",      category: "Network",   reporter: "Alex",          createdAt: "2026-06-07", comments: 2  },
+  { id: "MUB-110", title: "Network timeout not handled gracefully",       status: "Resolved",   severity: "Low",      category: "Network",   reporter: "Alex",          createdAt: "2026-06-07", comments: 2  },
   { id: "MUB-111", title: "Axe swing damage inconsistent vs shield users",status: "Open",        severity: "High",     category: "Combat",    reporter: "Technoblade",   createdAt: "2026-06-06", comments: 11 },
   { id: "MUB-112", title: "Settings menu resets on client restart",       status: "In Progress", severity: "Medium",   category: "Client",    reporter: "Dream",         createdAt: "2026-06-05", comments: 3  },
   { id: "MUB-113", title: "Fog distance renders incorrectly on AMD GPUs", status: "Open",        severity: "Medium",   category: "Client",    reporter: "GeorgeNotFound", createdAt: "2026-06-04", comments: 8 },
   { id: "MUB-114", title: "Chat messages delay by ~2s during peak load",  status: "Open",        severity: "Medium",   category: "Network",   reporter: "Sapnap",        createdAt: "2026-06-03", comments: 0  },
   { id: "MUB-115", title: "Footstep audio cuts when sprinting on stone",  status: "Closed",      severity: "Low",      category: "Audio",     reporter: "Punz",          createdAt: "2026-06-02", comments: 1  },
-  { id: "MUB-116", title: "Trebuchet projectile despawns on chunk border",status: "Open",        severity: "High",     category: "World Gen", reporter: "BadBoyHalo",    createdAt: "2026-06-01", comments: 5  },
+  { id: "MUB-116", title: "Trebuchet projectile despawns on chunk border",status: "Open",        severity: "High",     category: "Server", reporter: "BadBoyHalo",    createdAt: "2026-06-01", comments: 5  },
   { id: "MUB-117", title: "Potion effects don't persist across respawns", status: "Resolved",    severity: "Medium",   category: "Combat",    reporter: "Skeppy",        createdAt: "2026-05-31", comments: 4  },
   { id: "MUB-118", title: "Spectator camera clips into walls in keep",    status: "Closed",      severity: "Low",      category: "Client",    reporter: "Antfrost",      createdAt: "2026-05-30", comments: 2  },
   { id: "MUB-119", title: "Inventory opens mid-combat despite lock",      status: "Open",        severity: "Critical", category: "UI",        reporter: "Ponk",          createdAt: "2026-05-29", comments: 7  },
@@ -48,9 +48,9 @@ const bugs: Bug[] = [
 
 /* --- Config --- */
 
-const STATUS_OPTIONS:   Status[]   = ["Open", "In Progress", "Resolved", "Closed", "Won't Fix"];
+const STATUS_OPTIONS:   Status[]   = ["Open", "In Progress", "Resolved", "Closed"];
 const SEVERITY_OPTIONS: Severity[] = ["Critical", "High", "Medium", "Low"];
-const CATEGORY_OPTIONS: Category[] = ["Client", "Server", "Combat", "UI", "World Gen", "Audio", "Network"];
+const CATEGORY_OPTIONS: Category[] = ["Client", "Server", "Combat", "UI", "Audio", "Network"];
 
 // Map values to CSS module class names
 const STATUS_CLASS: Record<Status, string> = {
@@ -58,7 +58,6 @@ const STATUS_CLASS: Record<Status, string> = {
   "In Progress": styles.statusProgress,
   "Resolved":    styles.statusResolved,
   "Closed":      styles.statusClosed,
-  "Won't Fix":   styles.statusWontfix,
 };
 
 const SEVERITY_CLASS: Record<Severity, string> = {
@@ -268,8 +267,6 @@ export default function BugTracker() {
           <StatCard label="Open"        value={openCount}     type="open" />
           <StatCard label="In Progress" value={progressCount} type="progress" />
           <StatCard label="Resolved"    value={resolvedCount} type="resolved" />
-          <StatCard label="Critical"    value={criticalCount} type="critical" />
-          <StatCard label="Total"       value={bugs.length} />
         </div>
 
         {/* --- Search + filters --- */}

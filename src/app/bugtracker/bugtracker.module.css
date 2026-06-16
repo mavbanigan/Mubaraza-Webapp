@@ -451,7 +451,6 @@
 .statusProgress { background: rgba(29, 143, 232, 0.15); color: #52aff0; border: 1px solid rgba(29, 143, 232, 0.35); }
 .statusResolved { background: rgba(76, 175, 125, 0.15); color: #4caf7d; border: 1px solid rgba(76, 175, 125, 0.3); }
 .statusClosed   { background: rgba(120, 120, 140, 0.15); color: #9aa0b8; border: 1px solid rgba(120, 120, 140, 0.25); }
-.statusWontfix  { background: rgba(160, 80, 80, 0.15);  color: #c07070; border: 1px solid rgba(160, 80, 80, 0.25); }
 
 /* Severity badges */
 .sevCritical { background: rgba(232, 74, 74, 0.15);  color: #e84a4a; border: 1px solid rgba(232, 74, 74, 0.35); }
