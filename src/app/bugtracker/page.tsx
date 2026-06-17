@@ -289,7 +289,6 @@ export default function BugTracker() {
 
           <div className={styles.filtersWrap}>
             <FilterSelect label="Status"   value={statusF}   options={STATUS_OPTIONS}   onChange={setStatusF} />
-            <FilterSelect label="Severity" value={severityF} options={SEVERITY_OPTIONS} onChange={setSevF} />
             <FilterSelect label="Category" value={categoryF} options={CATEGORY_OPTIONS} onChange={setCatF} />
           </div>
         </div>
