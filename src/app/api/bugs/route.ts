@@ -17,26 +17,38 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
-    const { title, category, severity, description, stepsToReproduce, reporter } = body;
+    let title: string, category: string, severity: string,
+        description: string, version: string, reporter: string,
+        status: string, resolution: string;
 
-    if (!title || !category || !severity || !description || !reporter) {
+    const contentType = req.headers.get("content-type") ?? "";
+    if (contentType.includes("application/json")) {
+      const body = await req.json();
+      ({ title, category, severity, description, version, reporter, status, resolution } = body);
+    } else {
+      const fd = await req.formData();
+      title       = (fd.get("title")       as string) ?? "";
+      category    = (fd.get("category")    as string) ?? "";
+      severity    = (fd.get("severity")    as string) ?? "";
+      description = (fd.get("description") as string) ?? "";
+      version     = (fd.get("version")     as string) ?? "unknown";
+      reporter    = (fd.get("reporter")    as string) ?? "Anonymous";
+      status      = (fd.get("status")      as string) ?? "Open";
+      resolution  = (fd.get("resolution")  as string) ?? "";
+    }
+
+    if (!title || !category || !severity || !description) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    // Generate next MUB-NNN id
     const { rows: countRows } = await pool.query("SELECT COUNT(*) FROM bugs");
     const next = parseInt(countRows[0].count, 10) + 101;
     const id = `MUB-${next}`;
 
-    const fullDescription = stepsToReproduce
-      ? `${description}\n\n**Steps to Reproduce:**\n${stepsToReproduce}`
-      : description;
-
     await pool.query(
-      `INSERT INTO bugs (id, title, category, severity, description, reporter, version_affected)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-      [id, title, category, severity, fullDescription, reporter, "unknown"]
+      `INSERT INTO bugs (id, title, category, severity, description, reporter, version_affected, status, resolution)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+      [id, title, category, severity, description, reporter || "Anonymous", version || "unknown", status || "Open", resolution || null]
     );
 
     return NextResponse.json({ id }, { status: 201 });
