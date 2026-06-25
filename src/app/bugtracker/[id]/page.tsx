@@ -60,30 +60,11 @@ function BugIcon() {
   );
 }
 
-function CalendarIcon() {
+function ChevronIcon() {
   return (
-    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
-      <rect x="1" y="2" width="11" height="10" rx="2" stroke="currentColor" strokeWidth="1.3" />
-      <path d="M1 5h11M4 1v2M9 1v2" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function UserIcon() {
-  return (
-    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
-      <circle cx="6.5" cy="4" r="2.5" stroke="currentColor" strokeWidth="1.3" />
-      <path d="M1.5 12c0-2.76 2.24-5 5-5s5 2.24 5 5" stroke="currentColor"
-        strokeWidth="1.3" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function TagIcon() {
-  return (
-    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
-      <path d="M1 1h5l6 6-5 5-6-6V1z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
-      <circle cx="3.5" cy="3.5" r="1" fill="currentColor" />
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+      <path d="M2.5 5l4.5 4.5L11.5 5" stroke="currentColor" strokeWidth="1.7"
+        strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -91,8 +72,34 @@ function TagIcon() {
 /* --- Helpers --- */
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("en-US", {
-    year: "numeric", month: "long", day: "numeric",
+    year: "numeric", month: "short", day: "numeric",
   });
+}
+
+/* --- Accordion section --- */
+function Section({
+  label, date, defaultOpen = true, children,
+}: {
+  label: string;
+  date?: string;
+  defaultOpen?: boolean;
+  children: React.ReactNode;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div className={styles.section}>
+      <button className={styles.sectionToggle} onClick={() => setOpen(o => !o)}>
+        <span className={styles.sectionToggleLeft}>
+          <span className={styles.sectionLabel}>{label}</span>
+          {date && <span className={styles.sectionDate}>{date}</span>}
+        </span>
+        <span className={`${styles.chevron} ${open ? styles.chevronOpen : ""}`}>
+          <ChevronIcon />
+        </span>
+      </button>
+      {open && <div className={styles.sectionBody}>{children}</div>}
+    </div>
+  );
 }
 
 /* --- Page --- */
@@ -162,103 +169,74 @@ export default function BugDetailPage() {
       {header}
       <main className={styles.main}>
 
-        {/* --- Bug header card --- */}
-        <div className={styles.bugHeader}>
-          <div className={styles.bugMeta}>
-            <span className={styles.bugId}>{bug.id}</span>
-            <span className={`${styles.badge} ${STATUS_CLASS[bug.status]}`}>{bug.status}</span>
-            <span className={`${styles.badge} ${SEVERITY_CLASS[bug.severity]}`}>{bug.severity}</span>
-            <span className={styles.catBadge}>{bug.category}</span>
+        {/* --- Top strip: title + dates --- */}
+        <div className={styles.topStrip}>
+          <div className={styles.topLeft}>
+            <div className={styles.bugMeta}>
+              <span className={styles.bugId}>{bug.id}</span>
+              <span className={`${styles.badge} ${STATUS_CLASS[bug.status]}`}>{bug.status}</span>
+              <span className={`${styles.badge} ${SEVERITY_CLASS[bug.severity]}`}>{bug.severity}</span>
+              <span className={styles.catBadge}>{bug.category}</span>
+            </div>
+            <h2 className={styles.bugTitle}>{bug.title}</h2>
           </div>
 
-          <h2 className={styles.bugTitle}>{bug.title}</h2>
-
-          <div className={styles.bugInfoRow}>
-            <span className={styles.bugInfoItem}>
-              <UserIcon />
-              <span>Reported by <strong>{bug.reporter}</strong></span>
+          <div className={styles.dates}>
+            <span className={styles.dateItem}>
+              Opened <strong>{formatDate(bug.created_at)}</strong>
             </span>
-            <span className={styles.bugInfoItem}>
-              <CalendarIcon />
-              <span>Opened <strong>{formatDate(bug.created_at)}</strong></span>
-            </span>
-            <span className={styles.bugInfoItem}>
-              <TagIcon />
-              <span>Version <strong>{bug.version_affected}</strong></span>
+            <span className={styles.dateItem}>
+              Updated <strong>{formatDate(bug.updated_at)}</strong>
             </span>
           </div>
         </div>
 
-        {/* --- Content grid --- */}
-        <div className={styles.grid}>
+        {/* --- Accordion sections --- */}
+        <div className={styles.sections}>
 
-          {/* Description */}
-          <div className={styles.card}>
-            <p className={styles.cardTitle}>Description</p>
-            <p className={styles.description}>{bug.description}</p>
-
-            {bug.resolution && (
-              <div className={styles.resolution}>
-                <p className={styles.resolutionLabel}>Resolution</p>
-                <p className={styles.resolutionText}>{bug.resolution}</p>
-              </div>
-            )}
-          </div>
-
-          {/* Sidebar */}
-          <div className={styles.card}>
-            <p className={styles.cardTitle}>Details</p>
-            <div className={styles.detailList}>
-
-              <div className={styles.detailRow}>
+          {/* Details */}
+          <Section label="Details" defaultOpen={true}>
+            <div className={styles.detailsGrid}>
+              <div className={styles.detailCell}>
                 <span className={styles.detailLabel}>Status</span>
-                <span className={`${styles.badge} ${STATUS_CLASS[bug.status]}`}>{bug.status}</span>
+                <span className={`${styles.badge} ${STATUS_CLASS[bug.status]}`}
+                  style={{ alignSelf: "flex-start" }}>{bug.status}</span>
               </div>
-
-              <div className={styles.detailDivider} />
-
-              <div className={styles.detailRow}>
+              <div className={styles.detailCell}>
                 <span className={styles.detailLabel}>Severity</span>
-                <span className={`${styles.badge} ${SEVERITY_CLASS[bug.severity]}`}>{bug.severity}</span>
+                <span className={`${styles.badge} ${SEVERITY_CLASS[bug.severity]}`}
+                  style={{ alignSelf: "flex-start" }}>{bug.severity}</span>
               </div>
-
-              <div className={styles.detailDivider} />
-
-              <div className={styles.detailRow}>
+              <div className={styles.detailCell}>
                 <span className={styles.detailLabel}>Category</span>
                 <span className={styles.detailValue}>{bug.category}</span>
               </div>
-
-              <div className={styles.detailDivider} />
-
-              <div className={styles.detailRow}>
+              <div className={styles.detailCell}>
                 <span className={styles.detailLabel}>Version</span>
                 <span className={styles.detailValue}>{bug.version_affected}</span>
               </div>
-
-              <div className={styles.detailDivider} />
-
-              <div className={styles.detailRow}>
+              <div className={styles.detailCell}>
                 <span className={styles.detailLabel}>Reporter</span>
                 <span className={styles.detailValue}>{bug.reporter}</span>
               </div>
-
-              <div className={styles.detailDivider} />
-
-              <div className={styles.detailRow}>
-                <span className={styles.detailLabel}>Opened</span>
-                <span className={styles.detailValue}>{formatDate(bug.created_at)}</span>
-              </div>
-
-              <div className={styles.detailDivider} />
-
-              <div className={styles.detailRow}>
-                <span className={styles.detailLabel}>Last updated</span>
-                <span className={styles.detailValue}>{formatDate(bug.updated_at)}</span>
-              </div>
-
+              {bug.resolution && (
+                <div className={styles.detailCell}>
+                  <span className={styles.detailLabel}>Resolution</span>
+                  <span className={styles.detailValue}>{bug.resolution}</span>
+                </div>
+              )}
             </div>
-          </div>
+          </Section>
+
+          {/* Description */}
+          <Section label="Description" date={`Reported by ${bug.reporter}`} defaultOpen={true}>
+            <p className={styles.description}>{bug.description}</p>
+          </Section>
+
+          {/* Attachments */}
+          <Section label="Attachments" defaultOpen={false}>
+            <p className={styles.attachEmpty}>No attachments.</p>
+          </Section>
 
         </div>
       </main>

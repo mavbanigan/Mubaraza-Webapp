@@ -18,7 +18,7 @@
 }
 
 .headerInner {
-  max-width: 1300px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 0 28px;
   height: 64px;
@@ -65,11 +65,11 @@
   flex-shrink: 0;
 }
 
-/* --- Main layout --- */
+/* --- Main --- */
 .main {
-  max-width: 900px;
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 40px 28px 80px;
+  padding: 36px 28px 80px;
 }
 
 /* --- Loading / not found --- */
@@ -83,21 +83,27 @@
   font-size: 15px;
 }
 
-/* --- Bug header card --- */
-.bugHeader {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 28px 32px;
-  margin-bottom: 24px;
+/* --- Top strip: ID + title + dates --- */
+.topStrip {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.topLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
 }
 
 .bugMeta {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
-  margin-bottom: 14px;
 }
 
 .bugId {
@@ -114,7 +120,6 @@
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
   font-size: 12px;
   font-weight: 600;
   padding: 3px 10px;
@@ -122,13 +127,11 @@
   letter-spacing: 0.1px;
 }
 
-/* Status colors */
 .statusOpen     { background: rgba(232, 131, 74, 0.15); color: #e8834a; border: 1px solid rgba(232, 131, 74, 0.3); }
 .statusProgress { background: rgba(29, 143, 232, 0.15);  color: #52aff0; border: 1px solid rgba(29, 143, 232, 0.35); }
 .statusResolved { background: rgba(76, 175, 125, 0.15);  color: #4caf7d; border: 1px solid rgba(76, 175, 125, 0.3); }
 .statusClosed   { background: rgba(120, 120, 140, 0.15); color: #9aa0b8; border: 1px solid rgba(120, 120, 140, 0.25); }
 
-/* Severity colors */
 .sevCritical { background: rgba(232, 74, 74, 0.15);   color: #e84a4a; border: 1px solid rgba(232, 74, 74, 0.35); }
 .sevHigh     { background: rgba(232, 131, 74, 0.15);  color: #e8924a; border: 1px solid rgba(232, 131, 74, 0.3); }
 .sevMedium   { background: rgba(230, 200, 60, 0.13);  color: #d4b840; border: 1px solid rgba(230, 200, 60, 0.28); }
@@ -145,84 +148,123 @@
 }
 
 .bugTitle {
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 800;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.6px;
   color: var(--text);
-  line-height: 1.35;
-  margin-bottom: 16px;
+  line-height: 1.3;
 }
 
-.bugInfoRow {
+/* --- Dates column (top right) --- */
+.dates {
   display: flex;
-  gap: 24px;
-  flex-wrap: wrap;
-  font-size: 13px;
-  color: var(--text-muted);
-}
-
-.bugInfoItem {
-  display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-end;
   gap: 5px;
+  flex-shrink: 0;
+  padding-top: 4px;
 }
 
-.bugInfoItem strong {
+.dateItem {
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.dateItem strong {
   color: var(--text-nav);
   font-weight: 600;
 }
 
-/* --- Content grid --- */
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 260px;
-  gap: 20px;
-  align-items: start;
-}
-
-/* --- Card --- */
-.card {
-  background: var(--surface);
+/* --- Accordion sections --- */
+.sections {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 24px 28px;
+  overflow: hidden;
 }
 
-.cardTitle {
+.section {
+  border-bottom: 1px solid var(--border);
+}
+.section:last-child {
+  border-bottom: none;
+}
+
+/* Section toggle button */
+.sectionToggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: var(--surface);
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s;
+  text-align: left;
+  gap: 12px;
+}
+.sectionToggle:hover {
+  background: var(--surface-2);
+}
+
+.sectionToggleLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sectionLabel {
   font-size: 13px;
   font-weight: 700;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
-  margin-bottom: 14px;
-}
-
-.description {
-  font-size: 14px;
   color: var(--text-nav);
-  line-height: 1.75;
-  white-space: pre-wrap;
-  word-break: break-word;
+  text-transform: uppercase;
+  letter-spacing: 0.55px;
 }
 
-/* --- Sidebar details --- */
-.detailList {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+.sectionDate {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 400;
 }
 
-.detailRow {
+.chevron {
+  color: var(--text-muted);
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+/* Section body */
+.sectionBody {
+  padding: 20px 24px 24px;
+  background: rgba(255,255,255,0.015);
+  border-top: 1px solid var(--border);
+}
+
+/* --- Details grid inside accordion --- */
+.detailsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px 32px;
+}
+
+.detailCell {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 6px;
 }
 
 .detailLabel {
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.6px;
   color: var(--text-muted);
 }
 
@@ -232,9 +274,13 @@
   font-weight: 500;
 }
 
-.detailDivider {
-  height: 1px;
-  background: var(--border);
+/* --- Description body --- */
+.description {
+  font-size: 14px;
+  color: var(--text-nav);
+  line-height: 1.8;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 /* --- Resolution box --- */
@@ -247,10 +293,10 @@
 }
 
 .resolutionLabel {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.6px;
   color: #4caf7d;
   margin-bottom: 6px;
 }
@@ -261,11 +307,19 @@
   line-height: 1.6;
 }
 
+/* --- Attachments empty state --- */
+.attachEmpty {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
 /* --- Responsive --- */
-@media (max-width: 700px) {
-  .main { padding: 24px 16px 60px; }
-  .grid { grid-template-columns: 1fr; }
-  .bugHeader { padding: 20px; }
-  .bugTitle { font-size: 20px; }
+@media (max-width: 640px) {
+  .main { padding: 20px 16px 60px; }
+  .topStrip { flex-direction: column; gap: 12px; }
+  .dates { align-items: flex-start; }
+  .bugTitle { font-size: 21px; }
+  .detailsGrid { grid-template-columns: 1fr 1fr; }
   .headerSpacer { display: none; }
 }
