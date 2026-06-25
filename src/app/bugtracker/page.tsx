@@ -225,7 +225,7 @@ export default function BugTracker() {
     });
 
     return list;
-  }, [search, statusF, severityF, categoryF, sortKey, sortDir]);
+  }, [bugs, search, statusF, severityF, categoryF, sortKey, sortDir]);
 
   function toggleSort(key: typeof sortKey) {
     if (sortKey === key) setSortDir(d => d === "desc" ? "asc" : "desc");
