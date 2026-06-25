@@ -1,0 +1,271 @@
+/* --- Bug Detail Page --- */
+
+.page {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+}
+
+/* --- Header --- */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg-nav);
+  backdrop-filter: blur(18px) saturate(1.3);
+  border-bottom: 1px solid var(--border);
+}
+
+.headerInner {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 28px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  padding: 6px 12px;
+  border-radius: var(--radius);
+  transition: color 0.15s, background 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.back:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.headerBrand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  justify-content: center;
+}
+
+.headerTitle {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--text);
+}
+
+.headerSpacer {
+  width: 120px;
+  flex-shrink: 0;
+}
+
+/* --- Main layout --- */
+.main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 28px 80px;
+}
+
+/* --- Loading / not found --- */
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 80px 0;
+  color: var(--text-muted);
+  font-size: 15px;
+}
+
+/* --- Bug header card --- */
+.bugHeader {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px 32px;
+  margin-bottom: 24px;
+}
+
+.bugMeta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.bugId {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--blue-bright);
+  background: rgba(29, 143, 232, 0.1);
+  border: 1px solid rgba(29, 143, 232, 0.25);
+  border-radius: 6px;
+  padding: 3px 9px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.1px;
+}
+
+/* Status colors */
+.statusOpen     { background: rgba(232, 131, 74, 0.15); color: #e8834a; border: 1px solid rgba(232, 131, 74, 0.3); }
+.statusProgress { background: rgba(29, 143, 232, 0.15);  color: #52aff0; border: 1px solid rgba(29, 143, 232, 0.35); }
+.statusResolved { background: rgba(76, 175, 125, 0.15);  color: #4caf7d; border: 1px solid rgba(76, 175, 125, 0.3); }
+.statusClosed   { background: rgba(120, 120, 140, 0.15); color: #9aa0b8; border: 1px solid rgba(120, 120, 140, 0.25); }
+
+/* Severity colors */
+.sevCritical { background: rgba(232, 74, 74, 0.15);   color: #e84a4a; border: 1px solid rgba(232, 74, 74, 0.35); }
+.sevHigh     { background: rgba(232, 131, 74, 0.15);  color: #e8924a; border: 1px solid rgba(232, 131, 74, 0.3); }
+.sevMedium   { background: rgba(230, 200, 60, 0.13);  color: #d4b840; border: 1px solid rgba(230, 200, 60, 0.28); }
+.sevLow      { background: rgba(100, 180, 120, 0.13); color: #5db87a; border: 1px solid rgba(100, 180, 120, 0.28); }
+
+.catBadge {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 3px 10px;
+}
+
+.bugTitle {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--text);
+  line-height: 1.35;
+  margin-bottom: 16px;
+}
+
+.bugInfoRow {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.bugInfoItem {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.bugInfoItem strong {
+  color: var(--text-nav);
+  font-weight: 600;
+}
+
+/* --- Content grid --- */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 20px;
+  align-items: start;
+}
+
+/* --- Card --- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 28px;
+}
+
+.cardTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 14px;
+}
+
+.description {
+  font-size: 14px;
+  color: var(--text-nav);
+  line-height: 1.75;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* --- Sidebar details --- */
+.detailList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.detailRow {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.detailLabel {
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+}
+
+.detailValue {
+  font-size: 13.5px;
+  color: var(--text-nav);
+  font-weight: 500;
+}
+
+.detailDivider {
+  height: 1px;
+  background: var(--border);
+}
+
+/* --- Resolution box --- */
+.resolution {
+  margin-top: 20px;
+  padding: 16px 20px;
+  background: rgba(76, 175, 125, 0.07);
+  border: 1px solid rgba(76, 175, 125, 0.25);
+  border-radius: 10px;
+}
+
+.resolutionLabel {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #4caf7d;
+  margin-bottom: 6px;
+}
+
+.resolutionText {
+  font-size: 13.5px;
+  color: var(--text-nav);
+  line-height: 1.6;
+}
+
+/* --- Responsive --- */
+@media (max-width: 700px) {
+  .main { padding: 24px 16px 60px; }
+  .grid { grid-template-columns: 1fr; }
+  .bugHeader { padding: 20px; }
+  .bugTitle { font-size: 20px; }
+  .headerSpacer { display: none; }
+}
