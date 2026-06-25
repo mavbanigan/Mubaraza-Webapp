@@ -243,7 +243,7 @@
 /* Section body */
 .sectionBody {
   padding: 20px 24px 24px;
-  background: rgba(255,255,255,0.015);
+  background: var(--surface);
   border-top: 1px solid var(--border);
 }
 
