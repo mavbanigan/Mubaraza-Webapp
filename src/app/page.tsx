@@ -302,13 +302,11 @@ export default function Home() {
           <HeroLogo />
 
           <h1 className={styles.heroHeadline}>
-            The place where minecraft meets
-            <br />
-            <span className={styles.heroAccent}>Chivalry&nbsp;2.</span>
+            <span className={styles.heroAccent}>Mubaraza</span>
           </h1>
 
           <p className={styles.heroDescription}>
-            Idk what this mod does but description here.
+            This mod does sumn idk
           </p>
 
           <div className={styles.ctaRow}>

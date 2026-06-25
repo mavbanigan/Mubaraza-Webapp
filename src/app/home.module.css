@@ -223,8 +223,8 @@
   color: var(--blue);
   display: block;
   text-shadow:
-    0 0 80px rgba(29, 143, 232, 0.65),
-    0 0 140px rgba(29, 143, 232, 0.3);
+    0 0 80px rgba(29, 143, 232, 0.3),
+    0 0 140px rgba(29, 143, 232, 0.12);
 }
 
 .heroDescription {
