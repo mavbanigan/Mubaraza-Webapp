@@ -1,6 +1,3 @@
--- Run this once to set up the bugs table in PostgreSQL
--- psql -d mubaraza -f schema.sql
-
 CREATE TABLE IF NOT EXISTS bugs (
   id               TEXT PRIMARY KEY,             -- e.g. MUB-101
   title            TEXT        NOT NULL,
