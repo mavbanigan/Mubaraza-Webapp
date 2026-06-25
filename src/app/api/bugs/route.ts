@@ -73,13 +73,14 @@ export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
 
-    const title      = (formData.get("title")      as string | null)?.trim();
-    const category   =  formData.get("category")   as string | null;
-    const version    =  formData.get("version")    as string | null;
-    const status     = (formData.get("status")     as string | null) ?? "Open";
-    const severity   =  formData.get("severity")   as string | null;
-    const resolution = (formData.get("resolution") as string | null)?.trim() ?? "";
+    const title       = (formData.get("title")       as string | null)?.trim();
+    const category    =  formData.get("category")    as string | null;
+    const version     =  formData.get("version")     as string | null;
+    const status      = (formData.get("status")      as string | null) ?? "Open";
+    const severity    =  formData.get("severity")    as string | null;
+    const resolution  = (formData.get("resolution")  as string | null)?.trim() ?? "";
     const description = (formData.get("description") as string | null)?.trim();
+    const reporter    = (formData.get("reporter")    as string | null)?.trim() || "Anonymous";
 
     /* -- Server-side validation -- */
     if (!title || title.length < 10)
@@ -130,7 +131,7 @@ export async function POST(req: NextRequest) {
         resolution || null,
         description,
         JSON.stringify(attachments),
-        "Anonymous",   // replace with session user once auth is wired up
+        reporter,
       ]
     );
 
