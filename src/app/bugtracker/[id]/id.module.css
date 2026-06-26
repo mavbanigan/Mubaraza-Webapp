@@ -305,11 +305,47 @@
   line-height: 1.6;
 }
 
-/* --- Attachments empty state --- */
+/* --- Attachments --- */
 .attachEmpty {
   font-size: 13.5px;
   color: var(--text-muted);
   font-style: italic;
+}
+
+.attachList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.attachItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.attachIcon {
+  color: var(--blue-bright);
+  flex-shrink: 0;
+}
+
+.attachName {
+  flex: 1;
+  font-size: 13px;
+  color: var(--text-nav);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.attachSize {
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
 }
 
 /* --- Responsive --- */

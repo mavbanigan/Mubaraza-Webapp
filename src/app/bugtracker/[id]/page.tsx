@@ -9,6 +9,12 @@ import styles from "./id.module.css";
 type Status   = "Open" | "In Progress" | "Resolved" | "Closed";
 type Severity = "Critical" | "High" | "Medium" | "Low";
 
+interface Attachment {
+  name: string;
+  size: number;
+  type: string;
+}
+
 interface Bug {
   id:               string;
   title:            string;
@@ -19,6 +25,7 @@ interface Bug {
   version_affected: string;
   description:      string;
   resolution:       string | null;
+  attachments:      Attachment[];
   comment_count:    number;
   created_at:       string;
   updated_at:       string;
@@ -68,7 +75,22 @@ function ChevronIcon() {
   );
 }
 
+function FileIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+      <path d="M3 1h5.5L11 3.5V13H3V1z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
+      <path d="M8 1v3h3" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 /* --- Helpers --- */
+function formatBytes(bytes: number) {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("en-US", {
     year: "numeric", month: "short", day: "numeric",
@@ -223,8 +245,20 @@ export default function BugDetailPage() {
             <p className={styles.description}>{bug.description}</p>
           </Section>
 
-          <Section label="Attachments" defaultOpen={false}>
-            <p className={styles.attachEmpty}>No attachments.</p>
+          <Section label="Attachments" date={bug.attachments.length ? `${bug.attachments.length} file${bug.attachments.length !== 1 ? "s" : ""}` : undefined} defaultOpen={false}>
+            {bug.attachments.length === 0 ? (
+              <p className={styles.attachEmpty}>No attachments.</p>
+            ) : (
+              <div className={styles.attachList}>
+                {bug.attachments.map((f, i) => (
+                  <div key={i} className={styles.attachItem}>
+                    <span className={styles.attachIcon}><FileIcon /></span>
+                    <span className={styles.attachName}>{f.name}</span>
+                    <span className={styles.attachSize}>{formatBytes(f.size)}</span>
+                  </div>
+                ))}
+              </div>
+            )}
           </Section>
 
         </div>
