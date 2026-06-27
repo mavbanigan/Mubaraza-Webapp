@@ -3,7 +3,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { Pool } from "pg";
-import { BlobServiceClient } from "@azure/storage-blob";
+import { BlobServiceClient, BlobSASPermissions } from "@azure/storage-blob";
 
 /* --- DB connection pool ---
    Set these in your .env.local file:
@@ -98,16 +98,19 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Version is required." }, { status: 422 });
 
     /* -- Handle attachments --
-       In production you would upload these to S3/R2/etc and store the URLs.
-       Here we store file metadata only as a JSON column. */
-    const attachments: { name: string; size: number; type: string }[] = [];
-    const rawFiles = formData.getAll("attachments") as File[];
-    for (const file of rawFiles) {
-      if (file instanceof File && file.size > 0) {
-        attachments.push({ name: file.name, size: file.size, type: file.type });
-        // TODO: await uploadToStorage(file) and store URL
-      }
-    }
+       Upload files to Azure Blob Storage. This is done by creating a blob 
+       client for each file. */
+    const serviceClient = BlobServiceClient.fromConnectionString(process.env.AZURE_STORAGE_CONNECTION_STRING);
+    const containerClient = serviceClient.getContainerClient(process.env.AZURE_STORAGE_CONTAINER || "mubaraza-attachments");
+    const buffer = Buffer.from(await file.arrayBuffer());
+    const filename = `${Date.now()}-${file.name}`;
+    const newBlockBlobClient = containerClient.getBlockBlobClient(filename);
+    await newBlockBlobClient.uploadData(buffer, { blobHTTPHeaders: { blobContentType: file.type } });
+    const url = await newBlockBlobClient.generateSasUrl({
+  permissions: BlobSASPermissions.parse("r"),
+  expiresOn:   new Date(Date.now() + 10 * 365 * 24 * 60 * 60 * 1000),
+});
+    attachments.push({ name: filename, size: file.size, type: file.type, url });
 
     /* -- Auto-generate bug ID (MUB-NNN) --
        We use the bugs table's sequence to get the next number. */
