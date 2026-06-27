@@ -13,6 +13,7 @@ interface Attachment {
   name: string;
   size: number;
   type: string;
+  url: string;
 }
 
 interface Bug {
@@ -251,11 +252,11 @@ export default function BugDetailPage() {
             ) : (
               <div className={styles.attachList}>
                 {bug.attachments.map((f, i) => (
-                  <div key={i} className={styles.attachItem}>
+                  <a key={i} href={f.url} target="_blank" rel="noreferrer" className={styles.attachItem}>
                     <span className={styles.attachIcon}><FileIcon /></span>
                     <span className={styles.attachName}>{f.name}</span>
                     <span className={styles.attachSize}>{formatBytes(f.size)}</span>
-                  </div>
+                  </a>
                 ))}
               </div>
             )}
