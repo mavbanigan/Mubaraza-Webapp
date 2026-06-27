@@ -3,6 +3,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { Pool } from "pg";
+import { BlobServiceClient } from "@azure/storage-blob";
 
 /* --- DB connection pool ---
    Set these in your .env.local file:
