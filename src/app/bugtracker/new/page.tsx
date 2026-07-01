@@ -5,7 +5,6 @@ import styles from "./new-bug.module.css";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-/* --- Types --- */
 
 type Severity = "Critical" | "High" | "Medium" | "Low";
 type Category = "Client" | "Server" | "Combat" | "UI" | "Audio" | "Network";
@@ -34,7 +33,6 @@ interface AttachedFile {
   id:   string;
 }
 
-/* --- Constants --- */
 
 const CATEGORIES: Category[] = ["Client", "Server", "Combat", "UI", "Audio", "Network"];
 const STATUSES:   Status[]   = ["Open", "In Progress", "Resolved", "Closed"];
@@ -53,7 +51,6 @@ function formatBytes(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-/* --- Icons --- */
 
 function ArrowLeftIcon() {
   return (
@@ -122,7 +119,6 @@ function AlertIcon() {
   );
 }
 
-/* --- Page --- */
 
 export default function NewBugPage() {
   const router = useRouter();
@@ -146,7 +142,6 @@ export default function NewBugPage() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  /* -- Field update -- */
   function set<K extends keyof FormData>(key: K, val: FormData[K]) {
     setForm(f => ({ ...f, [key]: val }));
     if (errors[key as keyof FormErrors]) {
@@ -154,7 +149,6 @@ export default function NewBugPage() {
     }
   }
 
-  /* -- Validation -- */
   function validate(): boolean {
     const e: FormErrors = {};
     if (!form.title.trim())       e.title       = "Title is required.";
@@ -168,10 +162,9 @@ export default function NewBugPage() {
     return Object.keys(e).length === 0;
   }
 
-  /* -- File handling -- */
   const addFiles = useCallback((incoming: FileList | File[]) => {
     const arr = Array.from(incoming);
-    const MAX = 10 * 1024 * 1024; // 10 MB
+    const MAX = 10 * 1024 * 1024; // MAX of 10 MB
     const accepted: AttachedFile[] = [];
     for (const f of arr) {
       if (f.size > MAX) { showToast(`${f.name} is too large (max 10 MB).`); continue; }
@@ -190,7 +183,6 @@ export default function NewBugPage() {
     setTimeout(() => setToast(null), 4000);
   }
 
-  /* -- Submit -- */
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!validate()) return;
@@ -215,7 +207,6 @@ export default function NewBugPage() {
     }
   }
 
-  /* -- Success view -- */
   if (submitted) {
     return (
       <div className={styles.page}>
@@ -461,7 +452,6 @@ export default function NewBugPage() {
   );
 }
 
-/* --- Shared header --- */
 function Header() {
   return (
     <header className={styles.header}>
