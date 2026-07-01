@@ -84,8 +84,8 @@ export async function POST(req: NextRequest) {
     const reporter    = (formData.get("reporter")    as string | null)?.trim() || "Anonymous";
 
     /* -- Server-side validation -- */
-    if (!title || title.length < 10)
-      return NextResponse.json({ error: "Title must be at least 10 characters." }, { status: 422 });
+    if (!title || title.length < 5)
+      return NextResponse.json({ error: "Title must be at least 5 characters." }, { status: 422 });
     if (!category || !VALID_CATEGORIES.includes(category as Category))
       return NextResponse.json({ error: "Invalid category." }, { status: 422 });
     if (!severity || !VALID_SEVERITIES.includes(severity as Severity))
