@@ -25,7 +25,7 @@ function DownloadIcon() {
   );
 }
 
-function SignInArrow() {
+function LogInArrow() {
   return (
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
       <path d="M6 3H3a1 1 0 00-1 1v8a1 1 0 001 1h3" stroke="currentColor"
@@ -285,9 +285,9 @@ export default function Home() {
           </div>
 
           <div className={styles.navActions}>
-            <Link href="/signin" className={styles.signinBtn}>
-              <SignInArrow />
-              Sign in
+            <Link href="/login" className={styles.loginBtn}>
+              <LogInArrow />
+              Log in
             </Link>
           </div>
         </div>

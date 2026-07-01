@@ -124,8 +124,8 @@
   flex-shrink: 0;
 }
 
-/* Sign in pill */
-.signinBtn {
+/* Log in pill */
+.loginBtn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -140,7 +140,7 @@
   letter-spacing: -0.1px;
 }
 
-.signinBtn:hover {
+.loginBtn:hover {
   background: var(--blue-bright);
   box-shadow: 0 0 0 4px var(--blue-glow);
   transform: translateY(-1px);
