@@ -5,16 +5,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { Pool } from "pg";
 import { BlobServiceClient, BlobSASPermissions } from "@azure/storage-blob";
 
-/* --- DB connection pool ---
-   Set these in your .env.local file:
-   DATABASE_URL=postgresql://user:password@host:5432/mubaraza
-*/
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
 });
 
-/* --- Types --- */
 
 type Severity = "Critical" | "High" | "Medium" | "Low";
 type Category = "Client" | "Server" | "Combat" | "UI" | "Audio" | "Network";
@@ -26,7 +21,6 @@ const VALID_STATUSES:   Status[]   = ["Open", "In Progress", "Resolved", "Closed
 
 /* --- GET /api/bugs ---
    Returns all bugs, newest first.
-   Supports ?status=Open&severity=High&category=Combat&q=search query
 */
 export async function GET(req: NextRequest) {
   try {
@@ -83,7 +77,6 @@ export async function POST(req: NextRequest) {
     const description = (formData.get("description") as string | null)?.trim();
     const reporter    = (formData.get("reporter")    as string | null)?.trim() || "Anonymous";
 
-    /* -- Server-side validation -- */
     if (!title || title.length < 5)
       return NextResponse.json({ error: "Title must be at least 5 characters." }, { status: 422 });
     if (!category || !VALID_CATEGORIES.includes(category as Category))
@@ -122,13 +115,11 @@ export async function POST(req: NextRequest) {
       }
     }
   
-    /* -- Auto-generate bug ID (MUB-NNN) --
-       We use the bugs table's sequence to get the next number. */
+
     const countResult = await pool.query("SELECT COUNT(*) FROM bugs");
     const nextNum = parseInt(countResult.rows[0].count, 10) + 101;
     const bugId = `MUB-${nextNum}`;
 
-    /* -- Insert into DB -- */
     const result = await pool.query(
       `INSERT INTO bugs
         (id, title, category, version_affected, status, severity, resolution, description, attachments, reporter, comment_count, created_at)
