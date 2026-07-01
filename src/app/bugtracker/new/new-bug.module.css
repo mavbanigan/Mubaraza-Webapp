@@ -7,7 +7,6 @@
   font-family: var(--font);
 }
 
-/* --- Header --- */
 .header {
   position: sticky;
   top: 0;
@@ -65,14 +64,12 @@
   flex-shrink: 0;
 }
 
-/* --- Main layout --- */
 .main {
   max-width: 780px;
   margin: 0 auto;
   padding: 40px 28px 80px;
 }
 
-/* --- Page heading --- */
 .pageHeading {
   margin-bottom: 32px;
 }
@@ -91,21 +88,18 @@
   line-height: 1.6;
 }
 
-/* --- Form --- */
 .form {
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
-/* --- Field group (two columns) --- */
 .fieldRow {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
 
-/* --- Field --- */
 .field {
   display: flex;
   flex-direction: column;
@@ -130,7 +124,6 @@
   margin-top: -3px;
 }
 
-/* --- Inputs --- */
 .input,
 .select,
 .textarea {
@@ -192,7 +185,6 @@
   font-weight: 500;
 }
 
-/* --- Severity radio grid --- */
 .severityGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -251,13 +243,11 @@
   color: var(--text);
 }
 
-/* Severity dot colors */
 .dotCritical { background: #e84a4a; box-shadow: 0 0 6px rgba(232,74,74,0.5); }
 .dotHigh     { background: #e8924a; box-shadow: 0 0 6px rgba(232,146,74,0.5); }
 .dotMedium   { background: #d4b840; box-shadow: 0 0 6px rgba(212,184,64,0.5); }
 .dotLow      { background: #5db87a; box-shadow: 0 0 6px rgba(93,184,122,0.5); }
 
-/* --- Attachment dropzone --- */
 .dropzone {
   display: flex;
   flex-direction: column;
@@ -299,7 +289,6 @@
   opacity: 0.7;
 }
 
-/* File list */
 .fileList {
   display: flex;
   flex-direction: column;
@@ -351,14 +340,12 @@
   background: rgba(232, 74, 74, 0.1);
 }
 
-/* --- Divider --- */
 .divider {
   height: 1px;
   background: var(--border);
   margin: 4px 0;
 }
 
-/* --- Submit row --- */
 .submitRow {
   display: flex;
   align-items: center;
@@ -412,7 +399,6 @@
   cursor: not-allowed;
 }
 
-/* Spinner */
 .spinner {
   width: 15px;
   height: 15px;
@@ -426,7 +412,6 @@
   to { transform: rotate(360deg); }
 }
 
-/* --- Success state --- */
 .successCard {
   display: flex;
   flex-direction: column;
@@ -515,7 +500,6 @@
   border-color: rgba(255,255,255,0.2);
 }
 
-/* --- Toast --- */
 .toast {
   position: fixed;
   bottom: 28px;
@@ -546,7 +530,6 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* --- Responsive --- */
 @media (max-width: 640px) {
   .main { padding: 24px 16px 60px; }
   .fieldRow { grid-template-columns: 1fr; }
