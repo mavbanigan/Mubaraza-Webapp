@@ -8,7 +8,6 @@ import { useRouter } from "next/navigation";
 
 type Severity = "Critical" | "High" | "Medium" | "Low";
 type Category = "Client" | "Server" | "Combat" | "UI" | "Audio" | "Network";
-type Status   = "Open" | "In Progress" | "Resolved" | "Closed";
 
 interface FormData {
   title:       string;
@@ -33,7 +32,6 @@ interface AttachedFile {
 
 
 const CATEGORIES: Category[] = ["Client", "Server", "Combat", "UI", "Audio", "Network"];
-const STATUSES:   Status[]   = ["Open", "In Progress", "Resolved", "Closed"];
 const VERSIONS    = ["1.0.0", "1.0.1", "1.1.0", "1.2.0", "1.2.1", "1.3.0-beta"];
 
 const SEVERITY_OPTIONS: { value: Severity; dotClass: string; label: string }[] = [
