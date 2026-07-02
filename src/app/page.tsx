@@ -4,9 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import styles from "./home.module.css";
 
-/* ─── SVG Icons ─────────────────────────────────────────────────────────── */
-
-function ChevronDown() {
+function ChevronIcon() {
   return (
     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
       <path d="M3 5l4 4 4-4" stroke="currentColor" strokeWidth="1.8"
@@ -83,8 +81,6 @@ function SignUpArrow() {
   );
 }
 
-/* ─── Logos ──────────────────────────────────────────────────────────────── */
-
 function MBLogoSmall({ size = 34 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 34 34" fill="none" aria-label="Mubaraza logo">
@@ -134,7 +130,6 @@ function HeroLogo() {
   );
 }
 
-/* ─── Maze Background ────────────────────────────────────────────────────── */
 
 function MazeBackground() {
   const CELL = 80;
@@ -219,7 +214,6 @@ function MazeBackground() {
   );
 }
 
-/* ─── Dropdown ───────────────────────────────────────────────────────────── */
 
 interface DropdownItem { label: string; href?: string }
 
@@ -237,7 +231,7 @@ function NavDropdown({ label, items, icon }: {
       <button className={styles.navLink} aria-expanded={open} aria-haspopup="true">
         {icon && <span className={styles.navLinkIcon}>{icon}</span>}
         {label}
-        <span className={styles.navChevron}><ChevronDown /></span>
+        <span className={styles.navChevron}><ChevronIcon /></span>
       </button>
       {open && (
         <div className={styles.dropdownMenu} role="menu">
@@ -252,8 +246,6 @@ function NavDropdown({ label, items, icon }: {
     </div>
   );
 }
-
-/* ─── Page ───────────────────────────────────────────────────────────────── */
 
 export default function Home() {
   console.log(styles)

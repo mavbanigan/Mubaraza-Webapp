@@ -1,3 +1,5 @@
+CREATE SEQUENCE IF NOT EXISTS bug_id_seq START 101;
+
 CREATE TABLE IF NOT EXISTS bugs (
   id               TEXT PRIMARY KEY,             -- e.g. MUB-101
   title            TEXT        NOT NULL,

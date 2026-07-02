@@ -116,9 +116,8 @@ export async function POST(req: NextRequest) {
     }
   
 
-    const countResult = await pool.query("SELECT COUNT(*) FROM bugs");
-    const nextNum = parseInt(countResult.rows[0].count, 10) + 101;
-    const bugId = `MUB-${nextNum}`;
+    const seqResult = await pool.query("SELECT nextval('bug_id_seq')");
+    const bugId = `MUB-${seqResult.rows[0].nextval}`;
 
     const result = await pool.query(
       `INSERT INTO bugs
