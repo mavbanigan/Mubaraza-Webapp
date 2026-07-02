@@ -116,18 +116,16 @@ export async function POST(req: NextRequest) {
 
     const result = await pool.query(
       `INSERT INTO bugs
-        (id, title, category, version_affected, status, severity, resolution, description, attachments, reporter, comment_count, created_at)
+        (id, title, category, version_affected, severity, description, attachments, reporter, comment_count, created_at)
        VALUES
-        ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 0, NOW())
+        ($1, $2, $3, $4, $5, $6, $7, $8, 0, NOW())
        RETURNING id`,
       [
         bugId,
         title,
         category,
         version,
-        status,
         severity,
-        resolution || null,
         description,
         JSON.stringify(attachments),
         reporter,
