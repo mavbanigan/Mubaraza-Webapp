@@ -90,29 +90,28 @@ export async function POST(req: NextRequest) {
     if (!version)
       return NextResponse.json({ error: "Version is required." }, { status: 422 });
 
-    /* -- Handle attachments --
-       Upload files to Azure Blob Storage. This is done by creating a blob 
-       client for each file. */
-    const serviceClient = BlobServiceClient.fromConnectionString(process.env.AZURE_STORAGE_CONNECTION_STRING!);
-    const containerClient = serviceClient.getContainerClient(process.env.AZURE_STORAGE_CONTAINER || "mubaraza-attachments");
-
     const attachments: { name: string; size: number; type: string; url: string }[] = [];
-    const rawFiles = formData.getAll("attachments") as File[];
+    try {
+      const serviceClient = BlobServiceClient.fromConnectionString(process.env.AZURE_STORAGE_CONNECTION_STRING!);
+      const containerClient = serviceClient.getContainerClient(process.env.AZURE_STORAGE_CONTAINER || "mubaraza-attachments");
+      const rawFiles = formData.getAll("attachments") as File[];
 
-    for (const file of rawFiles) {
-      if (file instanceof File && file.size > 0) {
-        const buffer = Buffer.from(await file.arrayBuffer());
-        const filename = `${Date.now()}-${file.name}`;
-        const newBlockBlobClient = containerClient.getBlockBlobClient(filename);
+      for (const file of rawFiles) {
+        if (file instanceof File && file.size > 0) {
+          const buffer = Buffer.from(await file.arrayBuffer());
+          const filename = `${Date.now()}-${file.name}`;
+          const newBlockBlobClient = containerClient.getBlockBlobClient(filename);
 
-        await newBlockBlobClient.uploadData(buffer, { blobHTTPHeaders: { blobContentType: file.type } });
-        const url = await newBlockBlobClient.generateSasUrl({
-          permissions: BlobSASPermissions.parse("r"),
-          expiresOn: new Date(Date.now() + 10 * 365 * 24 * 60 * 60 * 1000),
-        });
-    attachments.push({ name: filename, size: file.size, type: file.type, url });
-
+          await newBlockBlobClient.uploadData(buffer, { blobHTTPHeaders: { blobContentType: file.type } });
+          const url = await newBlockBlobClient.generateSasUrl({
+            permissions: BlobSASPermissions.parse("r"),
+            expiresOn: new Date(Date.now() + 10 * 365 * 24 * 60 * 60 * 1000),
+          });
+          attachments.push({ name: file.name, size: file.size, type: file.type, url });
+        }
       }
+    } catch (uploadErr) {
+      console.error("[POST /api/bugs] Azure upload failed, saving bug without attachments:", uploadErr);
     }
   
 
