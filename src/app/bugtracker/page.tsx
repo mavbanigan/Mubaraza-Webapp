@@ -241,7 +241,7 @@ export default function BugTracker() {
             <span>Back to Mubaraza</span>
           </Link>
           <div className={styles.brand}>
-            <span className={styles.brandIcon}>🐛</span>
+            <BugPlusIcon />
             <h1 className={styles.title}>Bug Tracker</h1>
           </div>
           <Link href="/bugtracker/new" className={styles.reportBtn}>
