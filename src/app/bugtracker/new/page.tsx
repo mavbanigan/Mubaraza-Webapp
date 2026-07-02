@@ -14,9 +14,7 @@ interface FormData {
   title:       string;
   category:    Category | "";
   version:     string;
-  status:      Status;
   severity:    Severity | "";
-  resolution:  string;
   description: string;
 }
 
@@ -127,9 +125,7 @@ export default function NewBugPage() {
     title:       "",
     category:    "",
     version:     "",
-    status:      "Open",
     severity:    "",
-    resolution:  "",
     description: "",
   });
 
@@ -307,34 +303,6 @@ export default function NewBugPage() {
             </div>
           </div>
 
-          {/* Status + Resolution */}
-          <div className={styles.fieldRow}>
-            <div className={styles.field}>
-              <label className={styles.label} htmlFor="status">Status</label>
-              <select
-                id="status"
-                className={styles.select}
-                value={form.status}
-                onChange={e => set("status", e.target.value as Status)}
-              >
-                {STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
-              </select>
-              <span className={styles.hint}>Defaults to Open for new reports.</span>
-            </div>
-
-            <div className={styles.field}>
-              <label className={styles.label} htmlFor="resolution">Resolution</label>
-              <input
-                id="resolution"
-                className={styles.input}
-                type="text"
-                placeholder="e.g. Fixed in v1.2.1."
-                value={form.resolution}
-                onChange={e => set("resolution", e.target.value)}
-              />
-              <span className={styles.hint}>Leave blank if unresolved.</span>
-            </div>
-          </div>
 
           {/* Severity */}
           <div className={styles.field}>
