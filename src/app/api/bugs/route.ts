@@ -71,9 +71,7 @@ export async function POST(req: NextRequest) {
     const title       = (formData.get("title")       as string | null)?.trim();
     const category    =  formData.get("category")    as string | null;
     const version     =  formData.get("version")     as string | null;
-    const status      = (formData.get("status")      as string | null) ?? "Open";
     const severity    =  formData.get("severity")    as string | null;
-    const resolution  = (formData.get("resolution")  as string | null)?.trim() ?? "";
     const description = (formData.get("description") as string | null)?.trim();
     const reporter    = (formData.get("reporter")    as string | null)?.trim() || "Anonymous";
 
@@ -83,8 +81,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid category." }, { status: 422 });
     if (!severity || !VALID_SEVERITIES.includes(severity as Severity))
       return NextResponse.json({ error: "Invalid severity." }, { status: 422 });
-    if (!VALID_STATUSES.includes(status as Status))
-      return NextResponse.json({ error: "Invalid status." }, { status: 422 });
     if (!description || description.length < 10)
       return NextResponse.json({ error: "Description too short." }, { status: 422 });
     if (!version)
