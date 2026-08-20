@@ -21,10 +21,10 @@ PostgreSQL via the pg package. Connection string in .env.local as DATABASE_URL. 
 - Homepage and bug tracker UI complete and styled
 - Report Bug form built at /bugtracker/new
 - API route written and connected to DB
-- Haven't yet connected to Azure blob storage for storing attachments
-- Haven't set up microsoft auth
-- Haven't set up Stripe payments
-- Haven't set up the following pages: Leaderboard, Log in, Sign Up, Download Client
+- Connected to Azure blob storage for storing attachments
+- Connected microsoft auth
+- Connected Stripe payments
+- Haven't finished styling the following pages: Leaderboard, Log in, Sign Up, Download Client
 
 ## Hard Constraints/Workflows
 Write the minimum code that solves the problem in front of you now, not the minimum that could solve every future version of it.
