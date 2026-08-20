@@ -5,19 +5,15 @@ import styles from "./new-bug.module.css";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-/* --- Types --- */
 
 type Severity = "Critical" | "High" | "Medium" | "Low";
 type Category = "Client" | "Server" | "Combat" | "UI" | "Audio" | "Network";
-type Status   = "Open" | "In Progress" | "Resolved" | "Closed";
 
 interface FormData {
   title:       string;
   category:    Category | "";
   version:     string;
-  status:      Status;
   severity:    Severity | "";
-  resolution:  string;
   description: string;
 }
 
@@ -34,10 +30,8 @@ interface AttachedFile {
   id:   string;
 }
 
-/* --- Constants --- */
 
 const CATEGORIES: Category[] = ["Client", "Server", "Combat", "UI", "Audio", "Network"];
-const STATUSES:   Status[]   = ["Open", "In Progress", "Resolved", "Closed"];
 const VERSIONS    = ["1.0.0", "1.0.1", "1.1.0", "1.2.0", "1.2.1", "1.3.0-beta"];
 
 const SEVERITY_OPTIONS: { value: Severity; dotClass: string; label: string }[] = [
@@ -53,7 +47,6 @@ function formatBytes(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-/* --- Icons --- */
 
 function ArrowLeftIcon() {
   return (
@@ -122,7 +115,6 @@ function AlertIcon() {
   );
 }
 
-/* --- Page --- */
 
 export default function NewBugPage() {
   const router = useRouter();
@@ -131,9 +123,7 @@ export default function NewBugPage() {
     title:       "",
     category:    "",
     version:     "",
-    status:      "Open",
     severity:    "",
-    resolution:  "",
     description: "",
   });
 
@@ -146,7 +136,6 @@ export default function NewBugPage() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  /* -- Field update -- */
   function set<K extends keyof FormData>(key: K, val: FormData[K]) {
     setForm(f => ({ ...f, [key]: val }));
     if (errors[key as keyof FormErrors]) {
@@ -154,7 +143,6 @@ export default function NewBugPage() {
     }
   }
 
-  /* -- Validation -- */
   function validate(): boolean {
     const e: FormErrors = {};
     if (!form.title.trim())       e.title       = "Title is required.";
@@ -168,10 +156,9 @@ export default function NewBugPage() {
     return Object.keys(e).length === 0;
   }
 
-  /* -- File handling -- */
   const addFiles = useCallback((incoming: FileList | File[]) => {
     const arr = Array.from(incoming);
-    const MAX = 10 * 1024 * 1024; // 10 MB
+    const MAX = 10 * 1024 * 1024; // MAX of 10 MB
     const accepted: AttachedFile[] = [];
     for (const f of arr) {
       if (f.size > MAX) { showToast(`${f.name} is too large (max 10 MB).`); continue; }
@@ -190,7 +177,6 @@ export default function NewBugPage() {
     setTimeout(() => setToast(null), 4000);
   }
 
-  /* -- Submit -- */
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!validate()) return;
@@ -215,7 +201,6 @@ export default function NewBugPage() {
     }
   }
 
-  /* -- Success view -- */
   if (submitted) {
     return (
       <div className={styles.page}>
@@ -316,34 +301,6 @@ export default function NewBugPage() {
             </div>
           </div>
 
-          {/* Status + Resolution */}
-          <div className={styles.fieldRow}>
-            <div className={styles.field}>
-              <label className={styles.label} htmlFor="status">Status</label>
-              <select
-                id="status"
-                className={styles.select}
-                value={form.status}
-                onChange={e => set("status", e.target.value as Status)}
-              >
-                {STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
-              </select>
-              <span className={styles.hint}>Defaults to Open for new reports.</span>
-            </div>
-
-            <div className={styles.field}>
-              <label className={styles.label} htmlFor="resolution">Resolution</label>
-              <input
-                id="resolution"
-                className={styles.input}
-                type="text"
-                placeholder="e.g. Fixed in v1.2.1."
-                value={form.resolution}
-                onChange={e => set("resolution", e.target.value)}
-              />
-              <span className={styles.hint}>Leave blank if unresolved.</span>
-            </div>
-          </div>
 
           {/* Severity */}
           <div className={styles.field}>
@@ -461,7 +418,6 @@ export default function NewBugPage() {
   );
 }
 
-/* --- Shared header --- */
 function Header() {
   return (
     <header className={styles.header}>

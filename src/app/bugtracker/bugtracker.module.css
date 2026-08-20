@@ -7,7 +7,6 @@
   font-family: var(--font);
 }
 
-/* --- Header --- */
 .header {
   position: sticky;
   top: 0;
@@ -86,7 +85,6 @@
   transform: translateY(-1px);
 }
 
-/* --- Main --- */
 .main {
   max-width: 1300px;
   margin: 0 auto;
@@ -96,7 +94,6 @@
   gap: 20px;
 }
 
-/* --- Stats row --- */
 .statsRow {
   display: flex;
   gap: 12px;
@@ -139,7 +136,6 @@
 .statResolved .statValue { color: #4caf7d; }
 .statCritical .statValue { color: #e84a4a; }
 
-/* --- Controls row --- */
 .controlsRow {
   display: flex;
   gap: 12px;
@@ -147,7 +143,6 @@
   align-items: center;
 }
 
-/* Search */
 .searchWrap {
   position: relative;
   flex: 1;
@@ -200,7 +195,6 @@
   background: rgba(255, 255, 255, 0.08);
 }
 
-/* Filters */
 .filtersWrap {
   display: flex;
   gap: 8px;
@@ -287,7 +281,6 @@
   background: rgba(29, 143, 232, 0.1);
 }
 
-/* --- Results meta --- */
 .resultsMeta {
   display: flex;
   align-items: center;
@@ -338,7 +331,6 @@
   background: rgba(29, 143, 232, 0.08);
 }
 
-/* --- Issue table --- */
 .issueTable {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -346,24 +338,22 @@
   overflow: hidden;
 }
 
-/* Shared row grid */
 .issueRow {
   display: grid;
   grid-template-columns:
-    80px    /* ID */
-    1fr     /* Title */
-    120px   /* Status */
-    96px    /* Severity */
-    100px   /* Category */
-    130px   /* Reporter */
-    100px   /* Date */
-    52px;   /* Comments */
+    80px 
+    1fr     
+    120px
+    96px  
+    100px   
+    130px  
+    100px  
+    52px;   
   align-items: center;
   gap: 0 16px;
   padding: 0 20px;
 }
 
-/* Header row */
 .issueRowHeader {
   height: 42px;
   background: rgba(0, 0, 0, 0.2);
@@ -375,7 +365,6 @@
   color: var(--text-muted);
 }
 
-/* Data rows */
 .issueRowData {
   height: 52px;
   border-bottom: 1px solid var(--border);
@@ -388,7 +377,6 @@
   background: rgba(255, 255, 255, 0.035);
 }
 
-/* Column styles */
 .bugId {
   font-size: 12px;
   font-weight: 700;
@@ -434,7 +422,6 @@
   font-weight: 500;
 }
 
-/* --- Badges --- */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -446,19 +433,16 @@
   white-space: nowrap;
 }
 
-/* Status badges */
 .statusOpen     { background: rgba(232, 131, 74, 0.15); color: #e8834a; border: 1px solid rgba(232, 131, 74, 0.3); }
 .statusProgress { background: rgba(29, 143, 232, 0.15); color: #52aff0; border: 1px solid rgba(29, 143, 232, 0.35); }
 .statusResolved { background: rgba(76, 175, 125, 0.15); color: #4caf7d; border: 1px solid rgba(76, 175, 125, 0.3); }
 .statusClosed   { background: rgba(120, 120, 140, 0.15); color: #9aa0b8; border: 1px solid rgba(120, 120, 140, 0.25); }
 
-/* Severity badges */
 .sevCritical { background: rgba(232, 74, 74, 0.15);  color: #e84a4a; border: 1px solid rgba(232, 74, 74, 0.35); }
 .sevHigh     { background: rgba(232, 131, 74, 0.15); color: #e8924a; border: 1px solid rgba(232, 131, 74, 0.3); }
 .sevMedium   { background: rgba(230, 200, 60, 0.13); color: #d4b840; border: 1px solid rgba(230, 200, 60, 0.28); }
 .sevLow      { background: rgba(100, 180, 120, 0.13); color: #5db87a; border: 1px solid rgba(100, 180, 120, 0.28); }
 
-/* Category badge */
 .catBadge {
   font-size: 11.5px;
   font-weight: 600;
@@ -470,7 +454,6 @@
   white-space: nowrap;
 }
 
-/* --- Empty state --- */
 .issueEmpty {
   display: flex;
   flex-direction: column;
@@ -503,7 +486,6 @@
   background: rgba(29, 143, 232, 0.2);
 }
 
-/* --- Responsive --- */
 @media (max-width: 900px) {
   .issueRow {
     grid-template-columns: 70px 1fr 100px 84px 88px;

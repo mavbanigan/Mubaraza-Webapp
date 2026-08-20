@@ -5,7 +5,6 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import styles from "./id.module.css";
 
-/* --- Types --- */
 type Status   = "Open" | "In Progress" | "Resolved" | "Closed";
 type Severity = "Critical" | "High" | "Medium" | "Low";
 
@@ -46,7 +45,6 @@ const SEVERITY_CLASS: Record<Severity, string> = {
   "Low":      styles.sevLow,
 };
 
-/* --- Icons --- */
 function ArrowLeftIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -85,7 +83,6 @@ function FileIcon() {
   );
 }
 
-/* --- Helpers --- */
 function formatBytes(bytes: number) {
   if (bytes < 1024) return `${bytes} B`;
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
@@ -98,7 +95,6 @@ function formatDate(iso: string) {
   });
 }
 
-/* --- Accordion section --- */
 function Section({
   label, date, defaultOpen = true, children,
 }: {
@@ -124,7 +120,6 @@ function Section({
   );
 }
 
-/* --- Page --- */
 export default function BugDetailPage() {
   const params = useParams();
   const rawId  = params.id as string;

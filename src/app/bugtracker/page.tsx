@@ -4,7 +4,6 @@ import { useState, useMemo, useEffect } from "react";
 import styles from "./bugtracker.module.css";
 import Link from "next/link";
 
-/* --- Types --- */
 
 type Status   = "Open" | "In Progress" | "Resolved" | "Closed";
 type Severity = "Critical" | "High" | "Medium" | "Low";
@@ -22,7 +21,6 @@ interface Bug {
 }
 
 
-/* --- Config --- */
 
 const STATUS_OPTIONS:   Status[]   = ["Open", "In Progress", "Resolved", "Closed"];
 const SEVERITY_OPTIONS: Severity[] = ["Critical", "High", "Medium", "Low"];
@@ -43,7 +41,6 @@ const SEVERITY_CLASS: Record<Severity, string> = {
   "Low":      styles.sevLow,
 };
 
-/* --- Icons --- */
 
 function ArrowLeftIcon() {
   return (
@@ -102,8 +99,6 @@ function XIcon() {
   );
 }
 
-/* --- Filter dropdown --- */
-
 function FilterSelect<T extends string>({
   label, value, options, onChange,
 }: {
@@ -147,7 +142,6 @@ function FilterSelect<T extends string>({
   );
 }
 
-/* --- Stat card --- */
 
 // Map stat type to its CSS module class
 const STAT_CLASS = {
@@ -168,7 +162,6 @@ function StatCard({ label, value, type }: { label: string; value: number; type?:
   );
 }
 
-/* --- Main Page --- */
 
 export default function BugTracker() {
   const [bugs, setBugs]       = useState<Bug[]>([]);
@@ -248,7 +241,7 @@ export default function BugTracker() {
             <span>Back to Mubaraza</span>
           </Link>
           <div className={styles.brand}>
-            <span className={styles.brandIcon}>🐛</span>
+            <BugPlusIcon />
             <h1 className={styles.title}>Bug Tracker</h1>
           </div>
           <Link href="/bugtracker/new" className={styles.reportBtn}>

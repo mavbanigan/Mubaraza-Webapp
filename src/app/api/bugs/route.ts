@@ -5,16 +5,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { Pool } from "pg";
 import { BlobServiceClient, BlobSASPermissions } from "@azure/storage-blob";
 
-/* --- DB connection pool ---
-   Set these in your .env.local file:
-   DATABASE_URL=postgresql://user:password@host:5432/mubaraza
-*/
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
 });
 
-/* --- Types --- */
 
 type Severity = "Critical" | "High" | "Medium" | "Low";
 type Category = "Client" | "Server" | "Combat" | "UI" | "Audio" | "Network";
@@ -26,7 +21,6 @@ const VALID_STATUSES:   Status[]   = ["Open", "In Progress", "Resolved", "Closed
 
 /* --- GET /api/bugs ---
    Returns all bugs, newest first.
-   Supports ?status=Open&severity=High&category=Combat&q=search query
 */
 export async function GET(req: NextRequest) {
   try {
@@ -77,72 +71,61 @@ export async function POST(req: NextRequest) {
     const title       = (formData.get("title")       as string | null)?.trim();
     const category    =  formData.get("category")    as string | null;
     const version     =  formData.get("version")     as string | null;
-    const status      = (formData.get("status")      as string | null) ?? "Open";
     const severity    =  formData.get("severity")    as string | null;
-    const resolution  = (formData.get("resolution")  as string | null)?.trim() ?? "";
     const description = (formData.get("description") as string | null)?.trim();
     const reporter    = (formData.get("reporter")    as string | null)?.trim() || "Anonymous";
 
-    /* -- Server-side validation -- */
     if (!title || title.length < 5)
       return NextResponse.json({ error: "Title must be at least 5 characters." }, { status: 422 });
     if (!category || !VALID_CATEGORIES.includes(category as Category))
       return NextResponse.json({ error: "Invalid category." }, { status: 422 });
     if (!severity || !VALID_SEVERITIES.includes(severity as Severity))
       return NextResponse.json({ error: "Invalid severity." }, { status: 422 });
-    if (!VALID_STATUSES.includes(status as Status))
-      return NextResponse.json({ error: "Invalid status." }, { status: 422 });
     if (!description || description.length < 10)
       return NextResponse.json({ error: "Description too short." }, { status: 422 });
     if (!version)
       return NextResponse.json({ error: "Version is required." }, { status: 422 });
 
-    /* -- Handle attachments --
-       Upload files to Azure Blob Storage. This is done by creating a blob 
-       client for each file. */
-    const serviceClient = BlobServiceClient.fromConnectionString(process.env.AZURE_STORAGE_CONNECTION_STRING!);
-    const containerClient = serviceClient.getContainerClient(process.env.AZURE_STORAGE_CONTAINER || "mubaraza-attachments");
-
     const attachments: { name: string; size: number; type: string; url: string }[] = [];
-    const rawFiles = formData.getAll("attachments") as File[];
+    try {
+      const serviceClient = BlobServiceClient.fromConnectionString(process.env.AZURE_STORAGE_CONNECTION_STRING!);
+      const containerClient = serviceClient.getContainerClient(process.env.AZURE_STORAGE_CONTAINER || "mubaraza-attachments");
+      const rawFiles = formData.getAll("attachments") as File[];
 
-    for (const file of rawFiles) {
-      if (file instanceof File && file.size > 0) {
-        const buffer = Buffer.from(await file.arrayBuffer());
-        const filename = `${Date.now()}-${file.name}`;
-        const newBlockBlobClient = containerClient.getBlockBlobClient(filename);
+      for (const file of rawFiles) {
+        if (file instanceof File && file.size > 0) {
+          const buffer = Buffer.from(await file.arrayBuffer());
+          const filename = `${Date.now()}-${file.name}`;
+          const newBlockBlobClient = containerClient.getBlockBlobClient(filename);
 
-        await newBlockBlobClient.uploadData(buffer, { blobHTTPHeaders: { blobContentType: file.type } });
-        const url = await newBlockBlobClient.generateSasUrl({
-          permissions: BlobSASPermissions.parse("r"),
-          expiresOn: new Date(Date.now() + 10 * 365 * 24 * 60 * 60 * 1000),
-        });
-    attachments.push({ name: filename, size: file.size, type: file.type, url });
-
+          await newBlockBlobClient.uploadData(buffer, { blobHTTPHeaders: { blobContentType: file.type } });
+          const url = await newBlockBlobClient.generateSasUrl({
+            permissions: BlobSASPermissions.parse("r"),
+            expiresOn: new Date(Date.now() + 10 * 365 * 24 * 60 * 60 * 1000),
+          });
+          attachments.push({ name: file.name, size: file.size, type: file.type, url });
+        }
       }
+    } catch (uploadErr) {
+      console.error("[POST /api/bugs] Azure upload failed, saving bug without attachments:", uploadErr);
     }
   
-    /* -- Auto-generate bug ID (MUB-NNN) --
-       We use the bugs table's sequence to get the next number. */
-    const countResult = await pool.query("SELECT COUNT(*) FROM bugs");
-    const nextNum = parseInt(countResult.rows[0].count, 10) + 101;
-    const bugId = `MUB-${nextNum}`;
 
-    /* -- Insert into DB -- */
+    const seqResult = await pool.query("SELECT nextval('bug_id_seq')");
+    const bugId = `MUB-${seqResult.rows[0].nextval}`;
+
     const result = await pool.query(
       `INSERT INTO bugs
-        (id, title, category, version_affected, status, severity, resolution, description, attachments, reporter, comment_count, created_at)
+        (id, title, category, version_affected, severity, description, attachments, reporter, comment_count, created_at)
        VALUES
-        ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 0, NOW())
+        ($1, $2, $3, $4, $5, $6, $7, $8, 0, NOW())
        RETURNING id`,
       [
         bugId,
         title,
         category,
         version,
-        status,
         severity,
-        resolution || null,
         description,
         JSON.stringify(attachments),
         reporter,

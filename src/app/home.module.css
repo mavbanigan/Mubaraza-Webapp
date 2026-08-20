@@ -18,7 +18,6 @@
   align-items: center;
 }
 
-/* Brand */
 .brand {
   display: flex;
   align-items: center;
@@ -34,7 +33,6 @@
   color: var(--text);
 }
 
-/* Nav links */
 .navLinks {
   display: flex;
   align-items: center;
@@ -78,7 +76,6 @@
   opacity: 0.9;
 }
 
-/* Dropdown */
 .navDropdown {
   position: relative;
 }
@@ -116,7 +113,6 @@
   background: rgba(255, 255, 255, 0.07);
 }
 
-/* Right actions */
 .navActions {
   display: flex;
   align-items: center;
@@ -124,8 +120,7 @@
   flex-shrink: 0;
 }
 
-/* Sign in pill */
-.signinBtn {
+.loginBtn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -140,13 +135,12 @@
   letter-spacing: -0.1px;
 }
 
-.signinBtn:hover {
+.loginBtn:hover {
   background: var(--blue-bright);
   box-shadow: 0 0 0 4px var(--blue-glow);
   transform: translateY(-1px);
 }
 
-/* --- Hero --- */
 .hero {
   position: relative;
   min-height: 100vh;
@@ -237,7 +231,6 @@
   animation: fadeUp 0.7s 0.34s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-/* CTA row */
 .ctaRow {
   display: flex;
   gap: 14px;
@@ -284,7 +277,6 @@
   box-shadow: 0 0 0 5px var(--blue-glow), 0 8px 28px rgba(29, 143, 232, 0.35);
 }
 
-/* --- Responsive --- */
 @media (max-width: 768px) {
   .navLinks {
     display: none;
